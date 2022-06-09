@@ -1,0 +1,40 @@
+PODS:
+  - Alamofire (5.5.0)
+  - ReactiveKit (3.19.1)
+  - Realm (10.25.1):
+    - Realm/Headers (= 10.25.1)
+  - Realm/Headers (10.25.1)
+  - RealmSwift (10.25.1):
+    - Realm (= 10.25.1)
+  - SDWebImage (5.12.3):
+    - SDWebImage/Core (= 5.12.3)
+  - SDWebImage/Core (5.12.3)
+  - youtube-ios-player-helper-swift (1.1)
+
+DEPENDENCIES:
+  - Alamofire
+  - ReactiveKit
+  - RealmSwift
+  - SDWebImage
+  - youtube-ios-player-helper-swift
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - ReactiveKit
+    - Realm
+    - RealmSwift
+    - SDWebImage
+    - youtube-ios-player-helper-swift
+
+SPEC CHECKSUMS:
+  Alamofire: 1c4fb5369c3fe93d2857c780d8bbe09f06f97e7c
+  ReactiveKit: a36ebeb959fe6852dd674cc423163bfffb7e0541
+  Realm: 1a6e9b4f6983711655d8c0bcb6d2d29c3afbb1f3
+  RealmSwift: e72669550d27082aa4fad5d176f5076cfe806245
+  SDWebImage: 53179a2dba77246efa8a9b85f5c5b21f8f43e38f
+  youtube-ios-player-helper-swift: 51a3c5325317c8271d0c7985c1bbe5a252ffb2fd
+
+PODFILE CHECKSUM: 9b14e56eae39b0e087903d1275ef5def4932f86c
+
+COCOAPODS: 1.11.2
