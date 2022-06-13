@@ -5,5 +5,6 @@ target 'MyMovieList' do
   pod 'youtube-ios-player-helper-swift'
   pod 'RealmSwift'
   pod 'ReactiveKit'
+  pod 'Cosmos'
 
 end

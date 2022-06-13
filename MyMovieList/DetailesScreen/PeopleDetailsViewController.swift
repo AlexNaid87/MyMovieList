@@ -10,9 +10,10 @@ import UIKit
 class PeopleDetailsViewController: UIViewController {
     
     @IBOutlet weak var portretImageView: UIImageView!
-    @IBOutlet weak var bgImageView: UIImageView!
     @IBOutlet weak var personNameTextLabel: UILabel!
     @IBOutlet weak var descriptionTextLabel: UILabel!
+    @IBOutlet weak var popularityTextLabel: UILabel!
+    @IBOutlet weak var yearsOldAndPlaceWasBornTextLabel: UILabel!
     
     let savedMoviesVC = SavedMoviesVC()
     
@@ -33,16 +34,36 @@ class PeopleDetailsViewController: UIViewController {
         let personName = people.name
         personNameTextLabel.text = personName
         descriptionTextLabel.text = people.biography
-        
         let placeHolder = #imageLiteral(resourceName: "ImageHolder")
         let profilPath = people.profile_path ?? ""
         let urlString = "\(GlobalConstants.picTMDBurl)\(GlobalConstants.posterSize)\(profilPath)"
         let imageUrl = URL(string: urlString)
-        bgImageView.sd_setImage(with: imageUrl, placeholderImage: placeHolder, completed: nil)
-        bgImageView.applyBlurEffect()
-        
         portretImageView.sd_setImage(with: imageUrl, placeholderImage: placeHolder, completed: nil)
+        
+        let boldText = "Popularity: "
+        let fontSize = popularityTextLabel.font.pointSize
+        let attrs = [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: fontSize)]
+        let attributedString = NSMutableAttributedString(string:boldText, attributes:attrs)
+
+        let normalText = String(people.popularity ?? 0) + " of views for the day."
+        let normalString = NSMutableAttributedString(string:normalText)
+
+        attributedString.append(normalString)
+        popularityTextLabel.attributedText = attributedString
+        
+        var birthdayStr = people.birthday ?? ""
+        if let hyphenRange = birthdayStr.range(of: "-") {
+            birthdayStr.removeSubrange(hyphenRange.lowerBound..<birthdayStr.endIndex)
+        }
+        let birthdayYear = Int(birthdayStr) ?? 0
+        let thisYear = Calendar.current.component(.year, from: Date())
+        let ageYaer = Int(thisYear) - birthdayYear
+        let yearsOld = String(ageYaer) + " years old."
+        let placeOfBorn = people.place_of_birth ?? ""
+        let yearsAndPlaceString = yearsOld + " " + placeOfBorn
+        yearsOldAndPlaceWasBornTextLabel.text = yearsAndPlaceString
     }
+    
     
     
 
