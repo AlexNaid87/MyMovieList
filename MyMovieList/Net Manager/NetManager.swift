@@ -188,6 +188,21 @@ class NetManager {
             }
         }
     }
+    
+    func getMoviesCredits(peopleID: Int, completion: @escaping (([Cast])->())) {
+//        let urlString = "\(GlobalConstants.imbdUrl)3/person/\(peopleID)/movie_credits?api_key=\(GlobalConstants.api)"
+        let urlString = "https://api.themoviedb.org/3/person/\(peopleID)/movie_credits?api_key=dc7779f2a307a05dd46746f976ce9642&language=en-US"
+        AF.request(urlString).response { response in
+            guard let response = response.data else { return }
+            do {
+                let movieCreditsData = try JSONDecoder().decode(CreditsRespons.self, from: response)
+                guard let movieCredits = movieCreditsData.cast else { return }
+                completion(movieCredits)
+            } catch {
+                print(error)
+            }
+        }
+    }
 }
 
 

@@ -30,6 +30,8 @@ class DataManager {
         item.runTime            = itemTitle.runtime ?? 0
         item.tagLine            = itemTitle.tagline ?? ""
         item.video              = itemTitle.video ?? false
+    
+        item.genres             = getMovieGenres(array: itemTitle.genres ?? [])
         
         try? realm?.write {
             realm?.add(item)
@@ -64,6 +66,14 @@ class DataManager {
         }
     }
     
-   
+    private func getMovieGenres(array: [Genres]) -> String {
+        var genres = ""
+        for element in array {
+            genres += element.name ?? ""
+            genres += ", "
+        }
+        let result = genres.dropLast(2)
+        return String(result)
+    }
     
 }

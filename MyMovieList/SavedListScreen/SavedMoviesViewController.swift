@@ -16,7 +16,8 @@ class SavedMoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        updateNavBar()
+        setBackgroundImage(imageName: "BGFinal2.png", selectedView: view)
         savedMoviesTableView.register(UINib(nibName: "SavedMoviesTableViewCell", bundle: nil), forCellReuseIdentifier: "SavedMoviesTableViewCell")
         savedMoviesTableView.dataSource = self
         savedMoviesTableView.delegate = self
@@ -42,7 +43,7 @@ class SavedMoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegat
         
         let item = savedMoviesViewModel.savedItems[indexPath.row]
         cell.setupSavedMoviesCell(item: item)
-        
+        cell.selectionStyle = .none
         return cell
     }
     

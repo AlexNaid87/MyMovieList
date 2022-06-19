@@ -15,6 +15,7 @@ class MainScreenVC: UIViewController {
     @IBOutlet weak var lastMoviesCollectionView: UICollectionView!
     @IBOutlet weak var additionalCollectionView: UICollectionView!
     @IBOutlet weak var pageControl: UIPageControl!
+    @IBOutlet var mainView: UIView!
     
         let viewModel = MainScreenViewModel.shared
     private let layout = CustomLayout()
@@ -27,17 +28,27 @@ class MainScreenVC: UIViewController {
         
     let wIndex = 0.75
     let hIndex = 1.4
+    
+    
  
     override func viewDidLoad() {
         super.viewDidLoad()
+                
+        setBackgroundImage(imageName: "BGFinal2.png", selectedView: view)
+        
+        
         setupPlaingMoviesCollectionView()
         additionalCollectionView.register(UINib(nibName: "AdditionalMoviesCell", bundle: nil), forCellWithReuseIdentifier: "AdditionalMoviesCell")
         additionalCollectionView.dataSource = self
         additionalCollectionView.delegate = self
+        additionalCollectionView.backgroundColor = .clear
         viewModel.loadTopRatedMovieList {
             self.additionalCollectionView.reloadData()
         }
     }
+    
+    
+    
     
     //    @IBAction func testButtonPressed(_ sender: Any) {
     //        NetManager.shared.getSearchByWordMovies()
@@ -51,7 +62,6 @@ extension MainScreenVC {
         
         lastMoviesCollectionView.backgroundColor = .clear
         lastMoviesCollectionView.decelerationRate = .fast
-        //        lastMoviesCollectionView.contentInsetAdjustmentBehavior = .never
         lastMoviesCollectionView.showsVerticalScrollIndicator = false
         lastMoviesCollectionView.showsHorizontalScrollIndicator = false
         lastMoviesCollectionView.contentInset = UIEdgeInsets(top: 0, left: 50, bottom: 0, right: 50)
@@ -72,10 +82,7 @@ extension MainScreenVC {
             lastMoviesCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
             layout.currentPage = indexPath.item
             layout.previosOffset = layout.updateOffset(lastMoviesCollectionView)
-//
-//            if let cell = lastMoviesCollectionView.cellForItem(at: indexPath) {
-//                transformCell(cell)
-//            }
+
         }
     }
     
@@ -208,5 +215,6 @@ extension MainScreenVC {
         }
     }
 }
+
 
 

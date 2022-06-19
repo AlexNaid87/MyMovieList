@@ -14,6 +14,7 @@ class PeopleDetailsViewModel {
     
     var peopleID: Int?
     var people: PeopleDetails?
+    var cast: [Cast] = []
     
     func loadPeople(completionBlock: @escaping ((PeopleDetails)->())) {
         guard let peopleID = peopleID else { return }
@@ -21,6 +22,14 @@ class PeopleDetailsViewModel {
             self.people = people
             completionBlock(people)
         }
-        
     }
+    
+    func loadMovieCredits(completion: @escaping (()->())) {
+        guard let peopleID = peopleID else { return }
+        NetManager.shared.getMoviesCredits(peopleID: peopleID) { items in
+            self.cast = items
+            completion()
+        }
+    }
+    
 }

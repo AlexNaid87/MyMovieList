@@ -22,4 +22,11 @@ class MovieDetailsViewModel {
             completionBlock(movie)
         }
     }
+    
+    func getTimeDuration(runtime: Int) -> String {
+        let hours = runtime / 60
+        let minutes = runtime - (hours * 60)
+        let result: String = String(hours) + " h " + String(minutes) + " min"
+        return result
+    }
 }

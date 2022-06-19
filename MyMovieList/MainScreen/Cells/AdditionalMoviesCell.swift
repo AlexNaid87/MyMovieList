@@ -14,8 +14,7 @@ class AdditionalMoviesCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        let cornerRadius = posterImage.frame.width * 0.1
-        posterImage.layer.cornerRadius = cornerRadius
+        
         
     }
     
@@ -26,6 +25,8 @@ class AdditionalMoviesCell: UICollectionViewCell {
         let imageUrlString = "https://image.tmdb.org/t/p/w\(posterWeight)/\(posterPath)"
         let imageUrl = URL(string: imageUrlString)
         posterImage.sd_setImage(with: imageUrl, placeholderImage: placeHolder, completed: nil)
+        let cornerRadius = posterImage.frame.width * 0.1
+        posterImage.layer.cornerRadius = cornerRadius
     }
 
 }

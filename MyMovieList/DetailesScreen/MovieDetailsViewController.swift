@@ -22,28 +22,21 @@ class MovieDetailsViewController: UIViewController {
     @IBOutlet weak var starRatingView: CosmosView!
     @IBOutlet weak var yearActionDurationTextLabel: UILabel!
     @IBOutlet var mainView: UIView!
+    @IBOutlet weak var contentViewScroll: UIView!
     
     let savedMoviesVC = SavedMoviesVC()
     private var gradient: CAGradientLayer!
-    
+    let viewModel = MovieDetailsViewModel.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setBackgroundImage(imageName: "BGFinal2.png", selectedView: view)
+        updateNavBar()
         self.ytPlayer.isHidden = true
-        let cornerRadius = mainPosterImage.frame.height * 0.025
-        mainPosterImage.layer.cornerRadius = cornerRadius
-        MovieDetailsViewModel.shared.loadMovie() { movie in
+        viewModel.loadMovie() { movie in
             self.setUpDeteils(movie: movie)
         }
-        
-        
-        let gradient = CAGradientLayer()
-        gradient.frame = bgPosterImage.bounds
-        gradient.colors = [UIColor.black.cgColor,
-                           UIColor.clear.cgColor]
-        gradient.locations = [0.5, 0.9]
-        bgPosterImage.layer.mask = gradient
     }
     
     @IBAction func watchTrailerButtonPressed(_ sender: Any) {
@@ -59,8 +52,6 @@ class MovieDetailsViewController: UIViewController {
     func setUpDeteils(movie: MovieDetails ) {
         let mainMovieTitle = movie.title
         mainTitleTextLabel.text = mainMovieTitle
-        
-        
         descriptionTextLabel.text = movie.overview
         
         let releaseDate = movie.release_date ?? ""
@@ -79,7 +70,7 @@ class MovieDetailsViewController: UIViewController {
         }
         let actionType = actions.dropLast(2)
         
-        let durationText = getTimeDuration(runtime: movie.runtime ?? 0)
+        let durationText = viewModel.getTimeDuration(runtime: movie.runtime ?? 0)
         let yearActionDurationText = year + " • " + actionType + " • " + durationText
         yearActionDurationTextLabel.text = yearActionDurationText
         
@@ -97,11 +88,14 @@ class MovieDetailsViewController: UIViewController {
         let bgImageUrl = URL(string: bgImageUrlString)
         bgPosterImage.sd_setImage(with: bgImageUrl, placeholderImage: placeHolder, completed: nil)
         bgPosterImage.applyBlurEffect()
+        makeFadeOutMask(imageLayer: bgPosterImage)
         
         let posterPath = movie.poster_path ?? ""
         let imageUrlString = "\(picTMDBurl)\(pictureWeight)/\(posterPath)"
         let imageUrl = URL(string: imageUrlString)
         mainPosterImage.sd_setImage(with: imageUrl, placeholderImage: placeHolder, completed: nil)
+        let cornerRadius = mainPosterImage.frame.height * 0.025
+        mainPosterImage.layer.cornerRadius = cornerRadius
     }
     
     @IBAction func addToListButtonPressed(_ sender: Any) {
@@ -110,31 +104,44 @@ class MovieDetailsViewController: UIViewController {
         if DataManager.shared.isMovieExist(movieID!) != true {
             guard let movieArray = MovieDetailsViewModel.shared.movie else { return }
             DataManager.shared.save(movieArray)
+            displayAlert(message: "The Movie was added in list.")
         } else {
+            displayAlert(message: "This Movie is already in list.")
             print("Film with ID \(String(describing: movieID!)) already exist in list")
             return
         }
     }
     
-    private func getTimeDuration(runtime: Int) -> String {
-        let hours = runtime / 60
-        let minutes = runtime - (hours * 60)
-        let result: String = String(hours) + " h " + String(minutes) + " min"
-        return result
+    private func makeFadeOutMask(imageLayer: UIImageView) {
+        let gradient = CAGradientLayer()
+        gradient.frame = imageLayer.bounds
+        gradient.colors = [UIColor.black.cgColor,
+                           UIColor.clear.cgColor]
+        gradient.locations = [0.5, 0.9]
+        imageLayer.layer.mask = gradient
+    }
+    
+    private func displayAlert(message: String) {
+        let alert = UIAlertController(title: "",
+                                      message: message,
+                                      preferredStyle: UIAlertController.Style.alert)
+        
+        //        // add an action (button)
+        //        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        
+        self.present(alert, animated: true, completion: nil)
+        let when = DispatchTime.now() + 2
+        DispatchQueue.main.asyncAfter(deadline: when){
+            // your code with delay
+            alert.dismiss(animated: true, completion: nil)
+        }
+        
     }
     
 }
 
 
-extension UIImageView {
-    func applyBlurEffect() {
-        let blurEffect = UIBlurEffect(style: .dark)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = bounds
-        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        addSubview(blurEffectView)
-    }
-}
+
 
 
 

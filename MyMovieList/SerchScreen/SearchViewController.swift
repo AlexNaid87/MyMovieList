@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import ReactiveKit
 
 class SearchViewController: UIViewController {
     
@@ -20,7 +19,8 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        updateNavBar()
+        setBackgroundImage(imageName: "BGFinal2.png", selectedView: view)
         searchedMoviesCollectionView.register(UINib(nibName: "SearchedMoviesCell", bundle: nil), forCellWithReuseIdentifier: "SearchedMoviesCell")
         searchedMoviesCollectionView.dataSource = self
         searchedMoviesCollectionView.delegate = self
@@ -29,7 +29,14 @@ class SearchViewController: UIViewController {
         viewModel.loadMovieList(segmentedControl: index) {
             self.searchedMoviesCollectionView.reloadData()
         }
+        typeContentSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: UIControl.State.selected)
+        typeContentSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.gray], for: UIControl.State.normal)
+
         searchBar.delegate = self
+        searchBar.searchTextField.textColor = UIColor.white
+
+        
+        
     }
     
     @IBAction func segmentedControlChanged(_ sender: UISegmentedControl) {
