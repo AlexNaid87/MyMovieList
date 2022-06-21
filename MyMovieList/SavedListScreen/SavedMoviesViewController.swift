@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class SavedMoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class SavedMoviesVC: UIViewController {
     
     @IBOutlet weak var savedMoviesTableView: UITableView!
     
@@ -18,6 +18,19 @@ class SavedMoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegat
         super.viewDidLoad()
         updateNavBar()
         setBackgroundImage(imageName: "BGFinal2.png", selectedView: view)
+        setTableView()
+    }
+    
+        override func viewWillAppear(_ animated: Bool) {
+            savedMoviesViewModel.loadSavedMovieList {
+                savedMoviesTableView.reloadData()
+            }
+        }
+}
+
+// MARK: Tableview Options
+extension SavedMoviesVC: UITableViewDataSource, UITableViewDelegate {
+    private func setTableView() {
         savedMoviesTableView.register(UINib(nibName: "SavedMoviesTableViewCell", bundle: nil), forCellReuseIdentifier: "SavedMoviesTableViewCell")
         savedMoviesTableView.dataSource = self
         savedMoviesTableView.delegate = self
@@ -26,14 +39,6 @@ class SavedMoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegat
         }
     }
     
-        override func viewWillAppear(_ animated: Bool) {
-            savedMoviesViewModel.loadSavedMovieList {
-                savedMoviesTableView.reloadData()
-            }
-        }
-    
-    
-    //  MARK: TableView options:
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return savedMoviesViewModel.savedItems.count
     }
@@ -47,17 +52,9 @@ class SavedMoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegat
         return cell
     }
     
-    //  MARK: Heigth of  row
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 150
     }
-    
-    // MARK: Height between cells in sections
-//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//        return cellSpacingHeight
-//    }
-    
-    //  MARK: Delete item option
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if (editingStyle == .delete) {
@@ -69,7 +66,7 @@ class SavedMoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegat
             
         }
     }
-    //  MARK: Open a Detailed VC about Movie
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let storyboard = UIStoryboard(name:"Main", bundle: nil)
@@ -78,10 +75,7 @@ class SavedMoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegat
         MovieDetailsViewModel.shared.movieID = savedMoviesViewModel.savedItems[indexPath.row].id
         self.navigationController?.pushViewController(vc, animated: true)
     }
- 
 }
-
-
 
 
 

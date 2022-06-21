@@ -34,7 +34,7 @@ class TVShowDetailsViewController: UIViewController {
      
     }
     
-    //MARK: setup for TVShows
+//  MARK: setup for TVShows
     func setUpDeteils(tvShow: TVShowDetails ) {
         let originalTitle = tvShow.original_name
         originalNameTextLabel.text = originalTitle

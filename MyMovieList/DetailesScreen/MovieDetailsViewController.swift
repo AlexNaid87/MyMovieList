@@ -30,7 +30,6 @@ class MovieDetailsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setBackgroundImage(imageName: "BGFinal2.png", selectedView: view)
         updateNavBar()
         self.ytPlayer.isHidden = true
@@ -39,16 +38,9 @@ class MovieDetailsViewController: UIViewController {
         }
     }
     
-    @IBAction func watchTrailerButtonPressed(_ sender: Any) {
-        guard let movieID = MovieDetailsViewModel.shared.movieID else { return }
-        NetManager.shared.getMovieVideo(movieID: movieID) { video in
-            guard let keyCode = video[0].key else { return }
-            self.ytPlayer.isHidden = false
-            self.ytPlayer.load(videoId: keyCode)
-        }
-    }
     
-    //MARK: setup for movies:
+    
+    //  MARK: setup for movies:
     func setUpDeteils(movie: MovieDetails ) {
         let mainMovieTitle = movie.title
         mainTitleTextLabel.text = mainMovieTitle
@@ -98,6 +90,16 @@ class MovieDetailsViewController: UIViewController {
         mainPosterImage.layer.cornerRadius = cornerRadius
     }
     
+    //  MARK: Actions
+    @IBAction func watchTrailerButtonPressed(_ sender: Any) {
+        guard let movieID = MovieDetailsViewModel.shared.movieID else { return }
+        NetManager.shared.getMovieVideo(movieID: movieID) { video in
+            guard let keyCode = video[0].key else { return }
+            self.ytPlayer.isHidden = false
+            self.ytPlayer.load(videoId: keyCode)
+        }
+    }
+    
     @IBAction func addToListButtonPressed(_ sender: Any) {
         let movieID = MovieDetailsViewModel.shared.movieID
         print("Try to check movie with id: \(movieID!)")
@@ -126,18 +128,14 @@ class MovieDetailsViewController: UIViewController {
                                       message: message,
                                       preferredStyle: UIAlertController.Style.alert)
         
-        //        // add an action (button)
-        //        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
         
         self.present(alert, animated: true, completion: nil)
         let when = DispatchTime.now() + 2
         DispatchQueue.main.asyncAfter(deadline: when){
-            // your code with delay
             alert.dismiss(animated: true, completion: nil)
         }
-        
     }
-    
 }
 
 
