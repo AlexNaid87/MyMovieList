@@ -21,17 +21,17 @@ class SearchViewModel {
     func loadMovieList(segmentedControl: Int, completion: @escaping (()->())) {
         switch segmentedControl {
         case 0:
-            NetManager.shared.getPopularMovies(completionBlock: { items in
+            NetManager().getPopularMovies(completion: { items in
                 self.movieList = items
                 completion()
             })
         case 1:
-            NetManager.shared.getTVShows(completionBlock: { items in
+            NetManager().getTVShows(completion: { items in
                 self.tvShowList = items
                 completion()
             })
         default:
-            NetManager.shared.getPeople(completionBlock: { items in
+            NetManager().getPeople(completion: { items in
                 self.peopleList = items
                 completion()
             })
@@ -43,17 +43,17 @@ class SearchViewModel {
         let fixedWord = word.replacingOccurrences(of: " ", with: "%20")
         switch segmentedControl {
         case 1:
-            NetManager.shared.getSearchedTVShows(word: fixedWord) { tvShow in
+            NetManager().getSearchedTVShows(word: fixedWord) { tvShow in
                 self.tvShowList = tvShow
                 completion()
             }
         case 2:
-            NetManager.shared.getSearchedPeople(word: fixedWord) { people in
+            NetManager().getSearchedPeople(word: fixedWord) { people in
             self.peopleList = people
             completion()
         }
         default:
-            NetManager.shared.getSearchedMovies(word: fixedWord) { movie in
+            NetManager().getSearchedMovies(word: fixedWord) { movie in
                 self.movieList = movie
                 completion()
             }

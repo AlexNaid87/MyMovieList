@@ -17,7 +17,7 @@ class TVShowDetailsViewModel {
  
     func loadTVShow(completionBlock: @escaping ((TVShowDetails)->())) {
         guard let tvShowID = tvShowID else { return }
-        NetManager.shared.getTVShowDetails(tvShowID: tvShowID) { tvShow in
+        NetManager().getTVShowDetails(tvShowID: tvShowID) { tvShow in
             self.tvShow = tvShow
             completionBlock(tvShow)
         }

@@ -17,55 +17,40 @@ class MainScreenVC: UIViewController {
     @IBOutlet weak var pageControl: UIPageControl!
     @IBOutlet var mainView: UIView!
     
-        let viewModel = MainScreenViewModel.shared
+    let viewModel = MainScreenViewModel.shared
     private let layout = CustomLayout()
-        var itemW: CGFloat {
+    var itemW: CGFloat {
         return screenWidth * 0.5
     }
     var itemH: CGFloat {
         return itemW * 1.5
     }
-        
+    
     let wIndex = 0.75
     let hIndex = 1.4
     
-    
- 
     override func viewDidLoad() {
         super.viewDidLoad()
-                
         setBackgroundImage(imageName: "BGFinal2.png", selectedView: view)
-        
-        
         setupPlaingMoviesCollectionView()
-        additionalCollectionView.register(UINib(nibName: "AdditionalMoviesCell", bundle: nil), forCellWithReuseIdentifier: "AdditionalMoviesCell")
-        additionalCollectionView.dataSource = self
-        additionalCollectionView.delegate = self
-        additionalCollectionView.backgroundColor = .clear
-        viewModel.loadTopRatedMovieList {
-            self.additionalCollectionView.reloadData()
-        }
+        setupAdditionalCollectionView()
     }
-    
-    
-    
-    
-    //    @IBAction func testButtonPressed(_ sender: Any) {
-    //        NetManager.shared.getSearchByWordMovies()
-    //
-    //    }
 }
 
 extension MainScreenVC {
     
-    func setupPlaingMoviesCollectionView() {
-        
+    private func setupPlaingMoviesCollectionView() {
         lastMoviesCollectionView.backgroundColor = .clear
         lastMoviesCollectionView.decelerationRate = .fast
         lastMoviesCollectionView.showsVerticalScrollIndicator = false
         lastMoviesCollectionView.showsHorizontalScrollIndicator = false
-        lastMoviesCollectionView.contentInset = UIEdgeInsets(top: 0, left: 50, bottom: 0, right: 50)
-        lastMoviesCollectionView.register(UINib(nibName: "LastFilmsViewCell", bundle: nil), forCellWithReuseIdentifier: "LastFilmsViewCell")
+        lastMoviesCollectionView.contentInset = UIEdgeInsets(top: 0,
+                                                             left: 50,
+                                                             bottom: 0,
+                                                             right: 50)
+        lastMoviesCollectionView.register(UINib(nibName: "LastFilmsViewCell",
+                                                bundle: nil),
+                                          forCellWithReuseIdentifier: "LastFilmsViewCell")
         lastMoviesCollectionView.dataSource = self
         lastMoviesCollectionView.delegate = self
         lastMoviesCollectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -79,14 +64,24 @@ extension MainScreenVC {
             pageControl.numberOfPages = viewModel.nowPlayingMovies.count
             lastMoviesCollectionView.reloadData()
             let indexPath = IndexPath(item: 1, section: 0)
-            lastMoviesCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+            lastMoviesCollectionView.scrollToItem(at: indexPath,
+                                                  at: .centeredHorizontally,
+                                                  animated: true)
             layout.currentPage = indexPath.item
             layout.previosOffset = layout.updateOffset(lastMoviesCollectionView)
-
+            
         }
     }
     
-    
+    private func setupAdditionalCollectionView() {
+        additionalCollectionView.register(UINib(nibName: "AdditionalMoviesCell", bundle: nil), forCellWithReuseIdentifier: "AdditionalMoviesCell")
+        additionalCollectionView.dataSource = self
+        additionalCollectionView.delegate = self
+        additionalCollectionView.backgroundColor = .clear
+        viewModel.loadTopRatedMovieList {
+            self.additionalCollectionView.reloadData()
+        }
+    }
 }
 
 

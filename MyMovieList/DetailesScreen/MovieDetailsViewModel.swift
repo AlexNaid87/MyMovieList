@@ -17,7 +17,7 @@ class MovieDetailsViewModel {
     
     func loadMovie(completionBlock: @escaping ((MovieDetails)->())) {
         guard let movieID = movieID else { return }
-        NetManager.shared.getMovieDetails(movieID: movieID) { movie in
+        NetManager().getMovieDetails(movieID: movieID) { movie in
             self.movie = movie
             completionBlock(movie)
         }

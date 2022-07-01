@@ -93,7 +93,7 @@ class MovieDetailsViewController: UIViewController {
     //  MARK: Actions
     @IBAction func watchTrailerButtonPressed(_ sender: Any) {
         guard let movieID = MovieDetailsViewModel.shared.movieID else { return }
-        NetManager.shared.getMovieVideo(movieID: movieID) { video in
+        NetManager().getMovieVideo(movieID: movieID) { video in
             guard let keyCode = video[0].key else { return }
             self.ytPlayer.isHidden = false
             self.ytPlayer.load(videoId: keyCode)

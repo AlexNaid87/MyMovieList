@@ -17,14 +17,15 @@ class MainScreenViewModel {
     var topRatedMovies: [Movie] = []
     
     func loadPlayinMovieList(completion: @escaping (()->())) {
-        NetManager.shared.getNowPlayingMovies(completion: { movie in
+        NetManager().getNowPlayingMovies(completion: { movie in
             self.nowPlayingMovies = movie
             completion()
         })
+        
     }
     
     func loadTopRatedMovieList(completion: @escaping (()->())) {
-        NetManager.shared.getTopRatedMovies(completion: { movie in
+        NetManager().getTopRatedMovies(completion: { movie in
             self.topRatedMovies = movie
             completion()
         })
