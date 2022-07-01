@@ -61,8 +61,8 @@ extension MainScreenVC {
         layout.itemSize.width = itemW
         
         viewModel.loadPlayinMovieList { [self] in
-            pageControl.numberOfPages = viewModel.nowPlayingMovies.count
             lastMoviesCollectionView.reloadData()
+            pageControl.numberOfPages = viewModel.nowPlayingMovies.count
             let indexPath = IndexPath(item: 1, section: 0)
             lastMoviesCollectionView.scrollToItem(at: indexPath,
                                                   at: .centeredHorizontally,
@@ -140,7 +140,6 @@ extension MainScreenVC: UICollectionViewDelegate {
         if collectionView == lastMoviesCollectionView {
             pageControl.currentPage = indexPath.item
         } else { return }
-        
     }
 }
 
