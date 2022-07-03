@@ -25,16 +25,6 @@ class SavedMoviesTableViewCell: UITableViewCell {
         mainView.layer.cornerRadius = cornerRadius
         mainView.backgroundColor = UIColor(white: 1, alpha: 0.1)
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-    
-    @IBAction func alreadySawButtonPressed(_ sender: Any) {
-        
-    }
     
     func setupSavedMoviesCell(item: SavedItems) {
         let posterPath = String(describing: item.posterPath)

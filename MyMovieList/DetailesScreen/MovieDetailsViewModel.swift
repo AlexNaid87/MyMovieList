@@ -6,14 +6,16 @@
 //
 
 import Foundation
+import SwiftUI
 
 class MovieDetailsViewModel {
     
-    static let shared = MovieDetailsViewModel()
-    private init() {}
-    
     var movieID: Int?
     var movie: MovieDetails?
+    
+    func setMovieID(movieID: Int) {
+        self.movieID = movieID
+    }
     
     func loadMovie(completionBlock: @escaping ((MovieDetails)->())) {
         guard let movieID = movieID else { return }
@@ -28,5 +30,25 @@ class MovieDetailsViewModel {
         let minutes = runtime - (hours * 60)
         let result: String = String(hours) + " h " + String(minutes) + " min"
         return result
+    }
+}
+
+
+class Dynamic<T> {
+    typealias Listener = (T) -> Void
+    private var listener: Listener?
+    
+    func bind(_ listener: Listener?) {
+        self.listener = listener
+    }
+    
+    var value: T {
+        didSet {
+            listener?(value)
+        }
+    }
+    
+    init(_ v: T) {
+        value = v
     }
 }

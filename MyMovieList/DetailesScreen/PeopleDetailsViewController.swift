@@ -17,38 +17,20 @@ class PeopleDetailsViewController: UIViewController {
     @IBOutlet weak var popularityTextLabel: UILabel!
     @IBOutlet weak var descriptionTextLabel: UILabel!
     @IBOutlet weak var creditsCollectionView: UICollectionView!
-    @IBOutlet weak var heighConstrain: NSLayoutConstraint!
     @IBOutlet weak var scrollView: UIScrollView!
     
-    let viewModel = PeopleDetailsViewModel.shared
+    var viewModel = PeopleDetailsViewModel()
     let savedMoviesVC = SavedMoviesVC()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         updateNavBar()
-        setBackgroundImage(imageName: "BGFinal2.png", selectedView: view)
-        
-//        let heightContentView = descriptionTextLabel.frame.height + 850
-//        heighConstrain.constant = heightContentView
+        setBackgroundImage(selectedView: view)
         viewModel.loadPeople() { people in
-                    self.setUpDetails(people: people)
-                }
-        creditsCollectionView.register(UINib(nibName: "CreditsMovieCell", bundle: nil), forCellWithReuseIdentifier: "CreditsMovieCell")
-        creditsCollectionView.dataSource = self
-        creditsCollectionView.delegate = self
-        
-        viewModel.loadMovieCredits(completion: {
-            self.creditsCollectionView.reloadData()
-        })
-        
+            self.setUpDetails(people: people)
+        }
+        setupCreditsCollectionView()
     }
-    
-//    override func viewDidAppear(_ animated: Bool) {
-//        let contentRect: CGRect = scrollView.subviews.reduce(into: .zero) { rect, view in
-//            rect = rect.union(view.frame)
-//        }
-//        scrollView.contentSize = contentRect.size
-//    }
     
     //MARK: setup for People
     func setUpDetails(people: PeopleDetails ) {
@@ -88,7 +70,16 @@ class PeopleDetailsViewController: UIViewController {
         let placeOfBorn = people.place_of_birth ?? ""
         makeBoldPartText(boldText: "From: ", normalText: placeOfBorn, label: fromTextLabel)
         
-
+        
+    }
+    
+    func setupCreditsCollectionView() {
+        creditsCollectionView.registerCellWithNib(cellClass: CreditsMovieCell.self)
+        creditsCollectionView.dataSource = self
+        creditsCollectionView.delegate = self
+        viewModel.loadMovieCredits(completion: {
+            self.creditsCollectionView.reloadData()
+        })
     }
     
     
@@ -109,7 +100,7 @@ class PeopleDetailsViewController: UIViewController {
         attributedString.append(normalString)
         label.attributedText = attributedString
     }
-
+    
 }
 
 extension PeopleDetailsViewController: UICollectionViewDataSource {
@@ -131,15 +122,15 @@ extension PeopleDetailsViewController: UICollectionViewDelegate {
         print("Item was selected")
     }
 }
-    
-    
+
+
 
 extension PeopleDetailsViewController: UICollectionViewDelegateFlowLayout {
     //MARK: Size of cells
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = screenWidth * 0.25
+        let width = GlobalConstants.screenWidth * 0.25
         let height = width / 2 * 4
         return CGSize(width: width, height: height)
     }
@@ -147,16 +138,16 @@ extension PeopleDetailsViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
-        let leftRightSpace = (screenWidth * 0.095) / 2
-        return UIEdgeInsets(top: 0, left: leftRightSpace, bottom: 0, right: leftRightSpace)
+        let padding = (GlobalConstants.screenWidth * 0.095) / 2
+        return UIEdgeInsets(top: 0, left: padding, bottom: 0, right: padding)
     }
     
     //MARK: minimumLineSpacingForSectionAt method:
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        let spaceToSide = screenWidth * 0.095 / 2
-        return spaceToSide
+        let padding = GlobalConstants.screenWidth * 0.095 / 2
+        return padding
     }
     
     //MARK: minimumInteritemSpacingForSectionAt method:

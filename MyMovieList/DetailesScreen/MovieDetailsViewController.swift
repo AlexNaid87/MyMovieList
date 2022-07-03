@@ -25,18 +25,20 @@ class MovieDetailsViewController: UIViewController {
     @IBOutlet weak var contentViewScroll: UIView!
     
     let savedMoviesVC = SavedMoviesVC()
+    
+    var viewModel = MovieDetailsViewModel()
     private var gradient: CAGradientLayer!
-    let viewModel = MovieDetailsViewModel.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setBackgroundImage(imageName: "BGFinal2.png", selectedView: view)
+        setBackgroundImage(selectedView: view)
         updateNavBar()
         self.ytPlayer.isHidden = true
         viewModel.loadMovie() { movie in
             self.setUpDeteils(movie: movie)
         }
     }
+    
     
     
     
@@ -92,7 +94,7 @@ class MovieDetailsViewController: UIViewController {
     
     //  MARK: Actions
     @IBAction func watchTrailerButtonPressed(_ sender: Any) {
-        guard let movieID = MovieDetailsViewModel.shared.movieID else { return }
+        guard let movieID = viewModel.movieID else { return }
         NetManager().getMovieVideo(movieID: movieID) { video in
             guard let keyCode = video[0].key else { return }
             self.ytPlayer.isHidden = false
@@ -101,15 +103,18 @@ class MovieDetailsViewController: UIViewController {
     }
     
     @IBAction func addToListButtonPressed(_ sender: Any) {
-        let movieID = MovieDetailsViewModel.shared.movieID
-        print("Try to check movie with id: \(movieID!)")
-        if DataManager.shared.isMovieExist(movieID!) != true {
-            guard let movieArray = MovieDetailsViewModel.shared.movie else { return }
+        let movieID = viewModel.movieID
+        print("Try to check movie with id: \(String(describing: movieID))")
+        guard let movieID = movieID else {
+            return
+        }
+        if DataManager.shared.isMovieExist(movieID) != true {
+            guard let movieArray = viewModel.movie else { return }
             DataManager.shared.save(movieArray)
             displayAlert(message: "The Movie was added in list.")
         } else {
             displayAlert(message: "This Movie is already in list.")
-            print("Film with ID \(String(describing: movieID!)) already exist in list")
+            print("Film with ID \(String(describing: movieID)) already exist in list")
             return
         }
     }

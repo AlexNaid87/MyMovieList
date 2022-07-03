@@ -12,17 +12,17 @@ class SavedMoviesVC: UIViewController {
     
     @IBOutlet weak var savedMoviesTableView: UITableView!
     
-    let savedMoviesViewModel = SavedMoviesViewModel.shared
+    let viewModel = SavedMoviesViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         updateNavBar()
-        setBackgroundImage(imageName: "BGFinal2.png", selectedView: view)
+        setBackgroundImage(selectedView: view)
         setTableView()
     }
     
         override func viewWillAppear(_ animated: Bool) {
-            savedMoviesViewModel.loadSavedMovieList {
+            viewModel.loadSavedMovieList {
                 savedMoviesTableView.reloadData()
             }
         }
@@ -31,22 +31,22 @@ class SavedMoviesVC: UIViewController {
 // MARK: Tableview Options
 extension SavedMoviesVC: UITableViewDataSource, UITableViewDelegate {
     private func setTableView() {
-        savedMoviesTableView.register(UINib(nibName: "SavedMoviesTableViewCell", bundle: nil), forCellReuseIdentifier: "SavedMoviesTableViewCell")
+        savedMoviesTableView.registerCellWithNib(cellClass: SavedMoviesTableViewCell.self)
         savedMoviesTableView.dataSource = self
         savedMoviesTableView.delegate = self
-        savedMoviesViewModel.loadSavedMovieList {
+        viewModel.loadSavedMovieList {
             savedMoviesTableView.reloadData()
         }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return savedMoviesViewModel.savedItems.count
+        return viewModel.savedItems.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = savedMoviesTableView.dequeueReusableCell(withIdentifier: "SavedMoviesTableViewCell", for: indexPath) as! SavedMoviesTableViewCell
+        let cell: SavedMoviesTableViewCell = savedMoviesTableView.dequeueReusableCell(for:indexPath)
         
-        let item = savedMoviesViewModel.savedItems[indexPath.row]
+        let item = viewModel.savedItems[indexPath.row]
         cell.setupSavedMoviesCell(item: item)
         cell.selectionStyle = .none
         return cell
@@ -59,9 +59,9 @@ extension SavedMoviesVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if (editingStyle == .delete) {
             let position = indexPath.row
-            let item = savedMoviesViewModel.savedItems[position]
+            let item = viewModel.savedItems[position]
             DataManager.shared.remove(item)
-            savedMoviesViewModel.savedItems.remove(at: position)
+            viewModel.savedItems.remove(at: position)
             savedMoviesTableView.deleteRows(at: [indexPath], with: .fade)
             
         }
@@ -71,8 +71,9 @@ extension SavedMoviesVC: UITableViewDataSource, UITableViewDelegate {
         
         let storyboard = UIStoryboard(name:"Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(identifier: "MovieDetailsViewController") as? MovieDetailsViewController else { return }
-
-        MovieDetailsViewModel.shared.movieID = savedMoviesViewModel.savedItems[indexPath.row].id
+        let movieViewModel = MovieDetailsViewModel()
+        movieViewModel.movieID = viewModel.savedItems[indexPath.row].id
+        vc.viewModel = movieViewModel
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }

@@ -8,10 +8,7 @@
 import Foundation
 
 class TVShowDetailsViewModel {
-    
-    static let shared = TVShowDetailsViewModel()
-    private init() {}
-    
+
     var tvShowID: Int?
     var tvShow: TVShowDetails?
  

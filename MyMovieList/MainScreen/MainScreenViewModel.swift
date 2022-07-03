@@ -9,10 +9,7 @@ import Foundation
 import UIKit
 
 class MainScreenViewModel {
-    
-    static let shared = MainScreenViewModel()
-    private init() {}
-    
+        
     var nowPlayingMovies: [Movie] = []
     var topRatedMovies: [Movie] = []
     
@@ -21,7 +18,6 @@ class MainScreenViewModel {
             self.nowPlayingMovies = movie
             completion()
         })
-        
     }
     
     func loadTopRatedMovieList(completion: @escaping (()->())) {

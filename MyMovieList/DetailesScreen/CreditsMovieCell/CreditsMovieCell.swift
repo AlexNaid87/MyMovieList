@@ -16,7 +16,6 @@ class CreditsMovieCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
         let cornerRadius = imageView.frame.width * 0.05
         imageView.layer.cornerRadius = cornerRadius
     }

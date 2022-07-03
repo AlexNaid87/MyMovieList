@@ -9,9 +9,6 @@ import Foundation
 
 class PeopleDetailsViewModel {
     
-    static let shared = PeopleDetailsViewModel()
-    private init() {}
-    
     var peopleID: Int?
     var people: PeopleDetails?
     var cast: [Cast] = []

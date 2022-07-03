@@ -15,7 +15,6 @@ class AdditionalMoviesCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        
     }
     
     func setupLatestMoviesCell(item: Movie) {

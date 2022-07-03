@@ -9,9 +9,6 @@ import Foundation
 
 class SavedMoviesViewModel {
     
-    static let shared = SavedMoviesViewModel()
-    private init() {}
-    
     var savedItems: [SavedItems] = []
     var movieID: Int?
     

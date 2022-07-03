@@ -20,15 +20,13 @@ class TVShowDetailsViewController: UIViewController {
     
     
     let savedMoviesVC = SavedMoviesVC()
-    
-    
+    var viewModel = TVShowDetailsViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         updateNavBar()
-        setBackgroundImage(imageName: "BGFinal2.png", selectedView: view)
-
-        TVShowDetailsViewModel.shared.loadTVShow() { tvShow in
+        setBackgroundImage(selectedView: view)
+        viewModel.loadTVShow() { tvShow in
             self.setUpDeteils(tvShow: tvShow)
         }
      

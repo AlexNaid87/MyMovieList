@@ -7,31 +7,18 @@
 
 import UIKit
 
-let screenWidth   = UIScreen.main.bounds.size.width
-let screenHeight  = UIScreen.main.bounds.size.height
-
 class MainScreenVC: UIViewController {
     
     @IBOutlet weak var lastMoviesCollectionView: UICollectionView!
     @IBOutlet weak var additionalCollectionView: UICollectionView!
     @IBOutlet weak var pageControl: UIPageControl!
-    @IBOutlet var mainView: UIView!
     
-    let viewModel = MainScreenViewModel.shared
+    let viewModel = MainScreenViewModel()
     private let layout = CustomLayout()
-    var itemW: CGFloat {
-        return screenWidth * 0.5
-    }
-    var itemH: CGFloat {
-        return itemW * 1.5
-    }
-    
-    let wIndex = 0.75
-    let hIndex = 1.4
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setBackgroundImage(imageName: "BGFinal2.png", selectedView: view)
+        setBackgroundImage(selectedView: view)
         setupPlaingMoviesCollectionView()
         setupAdditionalCollectionView()
     }
@@ -44,37 +31,35 @@ extension MainScreenVC {
         lastMoviesCollectionView.decelerationRate = .fast
         lastMoviesCollectionView.showsVerticalScrollIndicator = false
         lastMoviesCollectionView.showsHorizontalScrollIndicator = false
+        let padding = CGFloat(GlobalConstants.padding)
         lastMoviesCollectionView.contentInset = UIEdgeInsets(top: 0,
-                                                             left: 50,
+                                                             left: padding,
                                                              bottom: 0,
-                                                             right: 50)
-        lastMoviesCollectionView.register(UINib(nibName: "LastFilmsViewCell",
-                                                bundle: nil),
-                                          forCellWithReuseIdentifier: "LastFilmsViewCell")
+                                                             right: padding)
+        lastMoviesCollectionView.registerCellWithNib(cellClass: LastFilmsViewCell.self)
         lastMoviesCollectionView.dataSource = self
         lastMoviesCollectionView.delegate = self
         lastMoviesCollectionView.translatesAutoresizingMaskIntoConstraints = false
         lastMoviesCollectionView.collectionViewLayout = layout
         layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = 50.0
-        layout.minimumInteritemSpacing = 50.0
-        layout.itemSize.width = itemW
+        layout.minimumLineSpacing = padding
+        layout.minimumInteritemSpacing = padding
+        layout.itemSize.width = GlobalConstants.itemW
         
         viewModel.loadPlayinMovieList { [self] in
             lastMoviesCollectionView.reloadData()
-            pageControl.numberOfPages = viewModel.nowPlayingMovies.count
+            pageControl.numberOfPages = (viewModel.nowPlayingMovies.count)
             let indexPath = IndexPath(item: 1, section: 0)
             lastMoviesCollectionView.scrollToItem(at: indexPath,
                                                   at: .centeredHorizontally,
                                                   animated: true)
             layout.currentPage = indexPath.item
-            layout.previosOffset = layout.updateOffset(lastMoviesCollectionView)
-            
+            layout.previosOffset = (layout.updateOffset(lastMoviesCollectionView))
         }
     }
     
     private func setupAdditionalCollectionView() {
-        additionalCollectionView.register(UINib(nibName: "AdditionalMoviesCell", bundle: nil), forCellWithReuseIdentifier: "AdditionalMoviesCell")
+        additionalCollectionView.registerCellWithNib(cellClass: AdditionalMoviesCell.self)
         additionalCollectionView.dataSource = self
         additionalCollectionView.delegate = self
         additionalCollectionView.backgroundColor = .clear
@@ -90,25 +75,31 @@ extension MainScreenVC {
 extension MainScreenVC: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView == lastMoviesCollectionView {
+        switch collectionView {
+        case lastMoviesCollectionView:
             return viewModel.nowPlayingMovies.count
-        } else {
+        case additionalCollectionView:
             return viewModel.topRatedMovies.count
+        default: return 0
         }
+        
     }
     
     // MARK: Setuping the cell content
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if collectionView == lastMoviesCollectionView {
-            let cell = lastMoviesCollectionView.dequeueReusableCell(withReuseIdentifier: "LastFilmsViewCell", for: indexPath) as! LastFilmsViewCell
+        switch collectionView {
+        case lastMoviesCollectionView:
+            let cell: LastFilmsViewCell = lastMoviesCollectionView.dequeueReusableCell(for: indexPath)
             let cellData = viewModel.nowPlayingMovies[indexPath.item]
             cell.setupCellLastMovies(item: cellData)
             return cell
-        } else {
-            let cell = additionalCollectionView.dequeueReusableCell(withReuseIdentifier: "AdditionalMoviesCell", for: indexPath) as! AdditionalMoviesCell
+        case additionalCollectionView:
+            let cell: AdditionalMoviesCell = additionalCollectionView.dequeueReusableCell(for: indexPath)
             let cellData = viewModel.topRatedMovies[indexPath.item]
             cell.setupLatestMoviesCell(item: cellData)
             return cell
+        default:
+            return UICollectionViewCell()
         }
     }
 }
@@ -117,7 +108,10 @@ extension MainScreenVC: UICollectionViewDataSource {
 extension MainScreenVC: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if collectionView == lastMoviesCollectionView {
+        let viewModelDetails = MovieDetailsViewModel()
+        switch collectionView {
+        case lastMoviesCollectionView:
+//            pageControl.currentPage = indexPath.item
             if indexPath.item != layout.currentPage {
                 lastMoviesCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
                 layout.currentPage = indexPath.item
@@ -125,22 +119,31 @@ extension MainScreenVC: UICollectionViewDelegate {
             } else {
                 let storyboard = UIStoryboard(name:"Main", bundle: nil)
                 guard let vc = storyboard.instantiateViewController(identifier: "MovieDetailsViewController") as? MovieDetailsViewController else { return }
-                MovieDetailsViewModel.shared.movieID = viewModel.nowPlayingMovies[indexPath.item].id!
+                viewModelDetails.movieID = viewModel.nowPlayingMovies[indexPath.item].id!
+                vc.viewModel = viewModelDetails
                 self.navigationController?.pushViewController(vc, animated: true)
             }
-        } else {
+        case additionalCollectionView:
             let storyboard = UIStoryboard(name:"Main", bundle: nil)
             guard let vc = storyboard.instantiateViewController(identifier: "MovieDetailsViewController") as? MovieDetailsViewController else { return }
+            viewModelDetails.movieID = viewModel.topRatedMovies[indexPath.item].id!
+            vc.viewModel = viewModelDetails
             self.navigationController?.pushViewController(vc, animated: true)
-            MovieDetailsViewModel.shared.movieID = viewModel.topRatedMovies[indexPath.item].id!
+        default:
+            return
         }
+        
     }
     
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if collectionView == lastMoviesCollectionView {
-            pageControl.currentPage = indexPath.item
-        } else { return }
-    }
+//        func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+//            if collectionView == lastMoviesCollectionView {
+//                pageControl.currentPage = indexPath.
+//                print(pageControl.currentPage)
+//            } else { return }
+//        }
+   
+    // DIDDISPLAY
+    // SCROLLVIEW DID END
 }
 
 extension MainScreenVC: UICollectionViewDelegateFlowLayout {
@@ -148,9 +151,10 @@ extension MainScreenVC: UICollectionViewDelegateFlowLayout {
     // MARK: Define size of cells
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == lastMoviesCollectionView {
-            return CGSize(width: itemW, height: itemH)
+            return CGSize(width: GlobalConstants.itemW,
+                          height: GlobalConstants.itemH)
         } else {
-            let cellw: Int = Int(screenWidth * 0.275)
+            let cellw: Int = Int(GlobalConstants.screenWidth * 0.275)
             let cellh: Int = cellw / 2 * 3
             return CGSize(width: cellw, height: cellh)
         }
@@ -161,8 +165,8 @@ extension MainScreenVC: UICollectionViewDelegateFlowLayout {
     // MARK: Spacing boaders for lastMoviesCollectionView from all sides
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         if collectionView == additionalCollectionView {
-            let leftRightSpace = (screenWidth - (screenWidth * 0.95))
-            return UIEdgeInsets(top: 0, left: leftRightSpace, bottom: 0, right: leftRightSpace)
+            let padding = (GlobalConstants.screenWidth - GlobalConstants.screenWidthMinusPadding)
+            return UIEdgeInsets(top: 0, left: padding, bottom: 0, right: padding)
         } else { return UIEdgeInsets()}
     }
     
@@ -173,7 +177,6 @@ extension MainScreenVC: UICollectionViewDelegateFlowLayout {
 extension MainScreenVC {
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        print("ScrollViewDidEndScrollingAnimation was working")
         setupCell()
     }
     
@@ -188,6 +191,7 @@ extension MainScreenVC {
         if let cell = lastMoviesCollectionView.cellForItem(at: indexPath) {
             transformCell(cell)
         }
+        pageControl.currentPage = indexPath.row
     }
     
     private func transformCell(_ cell: UICollectionViewCell, isEffect: Bool = true) {
@@ -209,6 +213,8 @@ extension MainScreenVC {
         }
     }
 }
+
+
 
 
 

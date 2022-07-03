@@ -23,6 +23,24 @@ struct GlobalConstants {
     static let colorDarkBlue        = UIColor(hue: 221, saturation: 67, brightness: 24, alpha: 1)
     static let colorLightWhite      = UIColor(hue: 0, saturation: 0, brightness: 90, alpha: 1)
     static let colorGray            = UIColor(hue: 0, saturation: 0, brightness: 76, alpha: 1)
+    static let BGimage              = UIImage(named: "BGFinal2.png")
+    
+    static let screenWidth          = UIScreen.main.bounds.size.width
+    static let screenHeight         = UIScreen.main.bounds.size.height
+    static let screenWidthMinusPadding = screenWidth * 0.95
+
+//MARK: Dementions for main collection view
+    static let padding = 50
+    
+    static var itemW: CGFloat {
+        return screenWidth * 0.5
+    }
+    static var itemH: CGFloat {
+        return itemW * 1.5
+    }
+    
+    let wIndex = 0.75
+    let hIndex = 1.4
 
     
 }

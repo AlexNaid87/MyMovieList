@@ -20,23 +20,10 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         updateNavBar()
-        setBackgroundImage(imageName: "BGFinal2.png", selectedView: view)
-        searchedMoviesCollectionView.register(UINib(nibName: "SearchedMoviesCell", bundle: nil), forCellWithReuseIdentifier: "SearchedMoviesCell")
-        searchedMoviesCollectionView.dataSource = self
-        searchedMoviesCollectionView.delegate = self
-        
-        let index = typeContentSegmentedControl.selectedSegmentIndex
-        viewModel.loadMovieList(segmentedControl: index) {
-            self.searchedMoviesCollectionView.reloadData()
-        }
-        typeContentSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: UIControl.State.selected)
-        typeContentSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.gray], for: UIControl.State.normal)
-
-        searchBar.delegate = self
-        searchBar.searchTextField.textColor = UIColor.white
-
-        
-        
+        setBackgroundImage(selectedView: view)
+        setupContentSegmentedControl()
+        setupCollectionView()
+        setupSearchBar()
     }
     
     @IBAction func segmentedControlChanged(_ sender: UISegmentedControl) {
@@ -47,7 +34,28 @@ class SearchViewController: UIViewController {
     }
 }
 
-
+extension SearchViewController {
+    
+    func setupCollectionView() {
+        searchedMoviesCollectionView.registerCellWithNib(cellClass: SearchedMoviesCell.self)
+        searchedMoviesCollectionView.dataSource = self
+        searchedMoviesCollectionView.delegate = self
+        let index = typeContentSegmentedControl.selectedSegmentIndex
+        viewModel.loadMovieList(segmentedControl: index) {
+            self.searchedMoviesCollectionView.reloadData()
+        }
+    }
+    
+    func setupContentSegmentedControl() {
+        typeContentSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: UIControl.State.selected)
+        typeContentSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.gray], for: UIControl.State.normal)
+    }
+    
+    func setupSearchBar() {
+        searchBar.delegate = self
+        searchBar.searchTextField.textColor = UIColor.white
+    }
+}
 
 // MARK: All CollectionView settings for SearchScreen ViewController
 // MARK: UICollectionViewDataSourse methods:
@@ -97,15 +105,21 @@ extension SearchViewController: UICollectionViewDelegate {
         switch index {
         case 1:
             guard let vc = storyboard.instantiateViewController(identifier: "TVShowDetailsViewController") as? TVShowDetailsViewController else { return }
-            TVShowDetailsViewModel.shared.tvShowID = viewModel.tvShowList[indexPath.row].id!
+            let tvShowViewModel = TVShowDetailsViewModel()
+            tvShowViewModel.tvShowID = viewModel.tvShowList[indexPath.row].id!
+            vc.viewModel = tvShowViewModel
             self.navigationController?.pushViewController(vc, animated: true)
         case 2:
             guard let vc = storyboard.instantiateViewController(identifier: "PeopleDetailsViewController") as? PeopleDetailsViewController else { return }
-            PeopleDetailsViewModel.shared.peopleID = viewModel.peopleList[indexPath.row].id!
+            let peopleViewModel = PeopleDetailsViewModel()
+            peopleViewModel.peopleID = viewModel.peopleList[indexPath.row].id!
+            vc.viewModel = peopleViewModel
             self.navigationController?.pushViewController(vc, animated: true)
         default:
             guard let vc = storyboard.instantiateViewController(identifier: "MovieDetailsViewController") as? MovieDetailsViewController else { return }
-            MovieDetailsViewModel.shared.movieID = viewModel.movieList[indexPath.row].id!
+            let movieViewModel = MovieDetailsViewModel()
+            movieViewModel.movieID = viewModel.movieList[indexPath.row].id!
+            vc.viewModel = movieViewModel
             self.navigationController?.pushViewController(vc, animated: true)
             
         }

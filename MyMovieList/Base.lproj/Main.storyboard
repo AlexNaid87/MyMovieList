@@ -103,7 +103,6 @@
                     <connections>
                         <outlet property="additionalCollectionView" destination="wcQ-OT-3ld" id="aWN-MO-Htr"/>
                         <outlet property="lastMoviesCollectionView" destination="sMc-p3-zxi" id="MZO-Px-VUn"/>
-                        <outlet property="mainView" destination="8bC-Xf-vdC" id="4GF-Qm-MLs"/>
                         <outlet property="pageControl" destination="hvF-9n-aa5" id="l9W-4h-JbV"/>
                     </connections>
                 </viewController>
