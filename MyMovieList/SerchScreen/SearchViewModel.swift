@@ -9,7 +9,7 @@ import Foundation
 
 class SearchViewModel {
     
-    static let shared = SearchViewModel()
+//    static let shared = SearchViewModel()
     
     var movieList: [Movie] = []
     var tvShowList: [TVShow] = []

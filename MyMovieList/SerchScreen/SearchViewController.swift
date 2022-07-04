@@ -15,7 +15,7 @@ class SearchViewController: UIViewController {
     
     let screenWidth = UIScreen.main.bounds.width
     var typeContent: Int?
-    let viewModel = SearchViewModel.shared
+    let viewModel = SearchViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()

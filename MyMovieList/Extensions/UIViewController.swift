@@ -13,11 +13,13 @@ extension UIViewController {
         let backgroundImageView = UIImageView(frame: selectedView.frame)
         backgroundImageView.image = backgroundImage
         selectedView.insertSubview(backgroundImageView, at: 0)
+        backgroundImageView.contentMode = .scaleToFill
     }
     
     func updateNavBar() {
-        let bgImage = UIImage(named: "BGFinal2.png")
+        let bgImage = GlobalConstants.BGimage
         self.tabBarController?.tabBar.backgroundImage = bgImage
+        self.tabBarController?.tabBar.contentMode = .scaleToFill
     }
     
 }

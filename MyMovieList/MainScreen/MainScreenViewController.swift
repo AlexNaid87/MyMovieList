@@ -111,7 +111,6 @@ extension MainScreenVC: UICollectionViewDelegate {
         let viewModelDetails = MovieDetailsViewModel()
         switch collectionView {
         case lastMoviesCollectionView:
-//            pageControl.currentPage = indexPath.item
             if indexPath.item != layout.currentPage {
                 lastMoviesCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
                 layout.currentPage = indexPath.item
@@ -132,18 +131,7 @@ extension MainScreenVC: UICollectionViewDelegate {
         default:
             return
         }
-        
     }
-    
-//        func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-//            if collectionView == lastMoviesCollectionView {
-//                pageControl.currentPage = indexPath.
-//                print(pageControl.currentPage)
-//            } else { return }
-//        }
-   
-    // DIDDISPLAY
-    // SCROLLVIEW DID END
 }
 
 extension MainScreenVC: UICollectionViewDelegateFlowLayout {
@@ -156,7 +144,8 @@ extension MainScreenVC: UICollectionViewDelegateFlowLayout {
         } else {
             let cellw: Int = Int(GlobalConstants.screenWidth * 0.275)
             let cellh: Int = cellw / 2 * 3
-            return CGSize(width: cellw, height: cellh)
+            return CGSize(width: cellw,
+                          height: cellh)
         }
     }
     
@@ -166,7 +155,10 @@ extension MainScreenVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         if collectionView == additionalCollectionView {
             let padding = (GlobalConstants.screenWidth - GlobalConstants.screenWidthMinusPadding)
-            return UIEdgeInsets(top: 0, left: padding, bottom: 0, right: padding)
+            return UIEdgeInsets(top: 0,
+                                left: padding,
+                                bottom: 0,
+                                right: padding)
         } else { return UIEdgeInsets()}
     }
     
@@ -213,8 +205,3 @@ extension MainScreenVC {
         }
     }
 }
-
-
-
-
-
