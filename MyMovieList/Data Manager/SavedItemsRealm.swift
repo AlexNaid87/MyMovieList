@@ -22,6 +22,4 @@ class SavedItems: Object {
     @objc dynamic var tagLine = ""
     @objc dynamic var video = false
     @objc dynamic var genres = ""
-    
-    
 }

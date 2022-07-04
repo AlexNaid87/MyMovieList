@@ -21,11 +21,11 @@ class SavedMoviesVC: UIViewController {
         setTableView()
     }
     
-        override func viewWillAppear(_ animated: Bool) {
-            viewModel.loadSavedMovieList {
-                savedMoviesTableView.reloadData()
-            }
+    override func viewWillAppear(_ animated: Bool) {
+        viewModel.loadSavedMovieList {
+            savedMoviesTableView.reloadData()
         }
+    }
 }
 
 // MARK: Tableview Options
@@ -60,10 +60,9 @@ extension SavedMoviesVC: UITableViewDataSource, UITableViewDelegate {
         if (editingStyle == .delete) {
             let position = indexPath.row
             let item = viewModel.savedItems[position]
-            DataManager.shared.remove(item)
+            DataManager().remove(item)
             viewModel.savedItems.remove(at: position)
             savedMoviesTableView.deleteRows(at: [indexPath], with: .fade)
-            
         }
     }
     
@@ -77,10 +76,3 @@ extension SavedMoviesVC: UITableViewDataSource, UITableViewDelegate {
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }
-
-
-
-
-
-
-

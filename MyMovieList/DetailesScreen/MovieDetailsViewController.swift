@@ -105,12 +105,11 @@ class MovieDetailsViewController: UIViewController {
     @IBAction func addToListButtonPressed(_ sender: Any) {
         let movieID = viewModel.movieID
         print("Try to check movie with id: \(String(describing: movieID))")
-        guard let movieID = movieID else {
-            return
-        }
-        if DataManager.shared.isMovieExist(movieID) != true {
+        guard let movieID = movieID else { return }
+        let dataManager = DataManager()
+        if dataManager.isMovieExist(movieID) != true {
             guard let movieArray = viewModel.movie else { return }
-            DataManager.shared.save(movieArray)
+            dataManager.save(movieArray)
             displayAlert(message: "The Movie was added in list.")
         } else {
             displayAlert(message: "This Movie is already in list.")

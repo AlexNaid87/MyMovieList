@@ -10,10 +10,6 @@ import RealmSwift
 
 class DataManager {
     
-    static let shared = DataManager()
-    private init() { }
-
-    
     let realm = try? Realm()
         
     func save(_ itemTitle: MovieDetails ) {
@@ -30,7 +26,6 @@ class DataManager {
         item.runTime            = itemTitle.runtime ?? 0
         item.tagLine            = itemTitle.tagline ?? ""
         item.video              = itemTitle.video ?? false
-    
         item.genres             = getMovieGenres(array: itemTitle.genres ?? [])
         
         try? realm?.write {

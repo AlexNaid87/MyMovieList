@@ -44,8 +44,6 @@ class SavedMoviesTableViewCell: UITableViewCell {
         
         let durationText = getDuration(runtime: item.runTime )
         durationLabel.text = durationText
-        
-        
     }
     
     private func getDuration(runtime: Int) -> String {

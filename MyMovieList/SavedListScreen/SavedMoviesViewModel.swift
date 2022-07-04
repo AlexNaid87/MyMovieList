@@ -13,7 +13,7 @@ class SavedMoviesViewModel {
     var movieID: Int?
     
     func loadSavedMovieList(completion: (()->())) {
-        savedItems = DataManager.shared.getItems()
+        savedItems = DataManager().getItems()
         completion()
     }
 }

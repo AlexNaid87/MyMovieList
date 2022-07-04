@@ -28,8 +28,8 @@ struct GlobalConstants {
     static let screenWidth          = UIScreen.main.bounds.size.width
     static let screenHeight         = UIScreen.main.bounds.size.height
     static let screenWidthMinusPadding = screenWidth * 0.95
-
-//MARK: Dementions for main collection view
+    
+    //MARK: Dementions for main collection view
     static let padding = 50
     
     static var itemW: CGFloat {
@@ -41,6 +41,4 @@ struct GlobalConstants {
     
     let wIndex = 0.75
     let hIndex = 1.4
-
-    
 }
