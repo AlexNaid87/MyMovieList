@@ -76,6 +76,7 @@ class TVShowDetailsViewController: UIViewController {
         let imageUrlString = "\(picTMDBurl)\(pictureWeight)/\(posterPath)"
         let imageUrl = URL(string: imageUrlString)
         posterImageView.sd_setImage(with: imageUrl, placeholderImage: placeHolder, completed: nil)
+        // Add to constants or add comment
         let cornerRadius = posterImageView.frame.height * 0.025
         posterImageView.layer.cornerRadius = cornerRadius
         

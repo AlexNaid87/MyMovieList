@@ -42,8 +42,9 @@ class MovieDetailsViewController: UIViewController {
     
     
     
-    //  MARK: setup for movies:
-    func setUpDeteils(movie: MovieDetails ) {
+    //  MARK: PRIVATE FUNCTIONS
+    
+    private func setUpDeteils(movie: MovieDetails ) {
         let mainMovieTitle = movie.title
         mainTitleTextLabel.text = mainMovieTitle
         descriptionTextLabel.text = movie.overview
@@ -68,15 +69,15 @@ class MovieDetailsViewController: UIViewController {
         let yearActionDurationText = year + " • " + actionType + " • " + durationText
         yearActionDurationTextLabel.text = yearActionDurationText
         
-        let voteAverage = movie.vote_average ?? 0.0
+        guard let voteAverage = movie.vote_average else { return }
         
         starRatingView.rating = voteAverage / 2
         starRatingView.text = String(voteAverage)
         
-        let pictureWeight = 500
-        let picTMDBurl = "https://image.tmdb.org/t/p/w"
-        let placeHolder = #imageLiteral(resourceName: "ImageHolder")
-        let bgPath = movie.backdrop_path ?? ""
+        let pictureWeight = GlobalConstants.posterSize
+        let picTMDBurl = GlobalConstants.picTMDBurl
+        let placeHolder = GlobalConstants.imagePlaceholder
+        guard let bgPath = movie.backdrop_path else { return }
         
         let bgImageUrlString = "\(picTMDBurl)\(pictureWeight)/\(bgPath)"
         let bgImageUrl = URL(string: bgImageUrlString)
@@ -132,7 +133,9 @@ class MovieDetailsViewController: UIViewController {
                                       message: message,
                                       preferredStyle: UIAlertController.Style.alert)
         
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+        alert.addAction(UIAlertAction(title: "OK",
+                                      style: UIAlertAction.Style.default,
+                                      handler: nil))
         
         self.present(alert, animated: true, completion: nil)
         let when = DispatchTime.now() + 2

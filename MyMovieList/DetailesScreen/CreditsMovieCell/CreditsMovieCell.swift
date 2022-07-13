@@ -16,7 +16,7 @@ class CreditsMovieCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        let cornerRadius = imageView.frame.width * 0.05
+        let cornerRadius = imageView.frame.width * GlobalConstants.cornerRadiusCoef
         imageView.layer.cornerRadius = cornerRadius
     }
     
@@ -29,14 +29,9 @@ class CreditsMovieCell: UICollectionViewCell {
                                 completed: nil)
 
         movieTitleLabel.text = item.title
-
         let releaseDate = item.release_date ?? ""
         let hyphenIndex = releaseDate.firstIndex(of: "-") ?? releaseDate.endIndex
         let year = String(releaseDate[..<hyphenIndex])
         yearLabel.text = year
-        
     }
-    
-    
-
 }

@@ -18,16 +18,11 @@ struct GlobalConstants {
     static let api                  : String    = "dc7779f2a307a05dd46746f976ce9642"
     static let imagePlaceholder                 = #imageLiteral(resourceName: "ImageHolder")
     static let youTubeLink          : String    = "https://www.youtube.com/watch?v="
-    
-    static let colorRed             = UIColor(hue: 352, saturation: 81, brightness: 84, alpha: 1)
-    static let colorDarkBlue        = UIColor(hue: 221, saturation: 67, brightness: 24, alpha: 1)
-    static let colorLightWhite      = UIColor(hue: 0, saturation: 0, brightness: 90, alpha: 1)
-    static let colorGray            = UIColor(hue: 0, saturation: 0, brightness: 76, alpha: 1)
-    static let BGimage              = UIImage(named: "BGFinal2.png")
-    
-    static let screenWidth          = UIScreen.main.bounds.size.width
-    static let screenHeight         = UIScreen.main.bounds.size.height
-    static let screenWidthMinusPadding = screenWidth * 0.95
+    static let BGimage                          = UIImage(named: "BGFinal2.png")
+    static let screenWidth                      = UIScreen.main.bounds.size.width
+    static let screenHeight                     = UIScreen.main.bounds.size.height
+    static let screenWidthMinusPadding          = screenWidth * 0.95
+    static let cornerRadiusCoef                 = 0.05
     
     //MARK: Dementions for main collection view
     static let padding = 50

@@ -18,7 +18,10 @@ class SearchedMoviesCell: UICollectionViewCell {
         let cornerRadius = posterImage.frame.height * 0.025
         posterImage.layer.cornerRadius = cornerRadius
     }
-    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        posterImage.image = nil
+    }
     
     func setupCell(item: Movie) {
         let placeHolder = #imageLiteral(resourceName: "ImageHolder")

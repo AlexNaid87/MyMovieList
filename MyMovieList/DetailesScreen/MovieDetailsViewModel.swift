@@ -33,7 +33,7 @@ class MovieDetailsViewModel {
     }
 }
 
-
+// Add to separate file
 class Dynamic<T> {
     typealias Listener = (T) -> Void
     private var listener: Listener?

@@ -9,10 +9,12 @@ import UIKit
 
 extension UIViewController {
     func setBackgroundImage(selectedView: UIView) {
+        // Do we need to pass selectedView
+        
         let backgroundImage = GlobalConstants.BGimage
         let backgroundImageView = UIImageView(frame: selectedView.frame)
         backgroundImageView.image = backgroundImage
-        selectedView.insertSubview(backgroundImageView, at: 0)
+        self.view.insertSubview(backgroundImageView, at: 0)
         backgroundImageView.contentMode = .scaleToFill
     }
     
